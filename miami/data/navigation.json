@@ -1,0 +1,26 @@
+    {
+        "brand": {
+            "name": "Miami Travel Site",
+            "href": "/",
+            "img":"/images/logo.png"
+        },
+        
+    "links": [
+        {
+            "text":"Home",
+            "href":"/"
+        },
+        {
+            "text":"Nightlife",
+            "href":"/nightlife"
+        },
+        {
+            "text":"Beaches",
+            "href":"/beaches"
+        },
+        {
+            "text":"About",
+            "href":"/about"
+        }
+    ]
+}
