@@ -3,6 +3,12 @@ const express = require('express')
 
 const app = express()
 
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.urlencoded({extended:true}))
+
+const handler = require('./lib/handler')
+
 //Setup the template engine
 const handlebars = require('express-handlebars')
 app.engine('handlebars', handlebars.engine());
@@ -40,6 +46,13 @@ app.get('/search', (request, response)=>{
         nav:navigation
     })
 })
+
+app.get('/basic',(req,res) => {
+    res.render('page', {req})
+})
+
+//Newsletter 
+app.get('/newsletter-signup', handler.newsletterSignup)
 
 //error handling goes after the actual routes
 //The default response is not found
