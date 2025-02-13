@@ -1,22 +1,22 @@
 // https://expressjs.com/
 const express = require('express')
-
 const app = express()
-
+/*
+body-parser is a middleware for Node.js that processes the incoming request bodies before they reach the handlers. It is used to extract data from the request body and make it available in the req.body property. This is essential for handling data submitted through HTML forms and JSON data. 
+*/
 const bodyParser = require('body-parser')
-
 app.use(bodyParser.urlencoded({extended:true}))
-
+// Import routes handlers
 const handler = require('./lib/handler')
 
-//Setup the template engine
+//Setup the template engine handlebars
 const handlebars = require('express-handlebars')
 app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
 
 // To set the port execute: port=8080 node miami  
 const port = process.env.port || 3000
-
+// Store navigation data
 let navigation = require("./data/navigation.json")
 //Create some routes
 app.get('/', (request,response)=>{
@@ -46,13 +46,14 @@ app.get('/search', (request, response)=>{
         nav:navigation
     })
 })
-
+//Basic GET form
 app.get('/basic',(req,res) => {
     res.render('page', {req})
 })
 
-//Newsletter 
+//Newsletter Routes
 app.get('/newsletter-signup', handler.newsletterSignup)
+
 
 //error handling goes after the actual routes
 //The default response is not found
