@@ -53,6 +53,8 @@ app.get('/basic',(req,res) => {
 
 //Newsletter Routes
 app.get('/newsletter-signup', handler.newsletterSignup)
+app.post('/newsletter-signup/process', handler.newsletterSignupProcess)
+app.get('/newsletter/list',handler.newsletterSignupList)
 
 
 //error handling goes after the actual routes
