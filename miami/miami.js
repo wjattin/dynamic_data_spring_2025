@@ -55,7 +55,11 @@ app.get('/basic',(req,res) => {
 app.get('/newsletter-signup', handler.newsletterSignup)
 app.post('/newsletter-signup/process', handler.newsletterSignupProcess)
 app.get('/newsletter/list',handler.newsletterSignupList)
-
+//Dynamic Routes
+//details shows one record 
+app.get('/newsletter/detail/:email',handler.newsletterUser)
+//delete users by email 
+app.get('/newsletter/delete/:email',handler.newsletterUserDelete)
 
 //error handling goes after the actual routes
 //The default response is not found
