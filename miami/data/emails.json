@@ -1,1 +1,1 @@
-{"users":[{"_csrf":"supersecret","firstname":"william","lastname":"jattin","address":"123 street address","city":"Miami","state":"Fl","zip":"33124","email":"wjattin@miami.edu"}]}
+{"users":[{"_csrf":"supersecret","firstname":"William","lastname":"Jattin","address":"123 street","city":"Miami","state":"FL","zip":"33123","email":"wjattin@miami.edu"}]}
