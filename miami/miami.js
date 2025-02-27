@@ -1,6 +1,9 @@
 // https://expressjs.com/
 const express = require('express')
 const app = express()
+//Setup static routing
+app.use(express.static('./public'))
+
 /*
 body-parser is a middleware for Node.js that processes the incoming request bodies before they reach the handlers. It is used to extract data from the request body and make it available in the req.body property. This is essential for handling data submitted through HTML forms and JSON data. 
 */
@@ -18,10 +21,60 @@ app.set('view engine', 'handlebars');
 const port = process.env.port || 3000
 // Store navigation data
 let navigation = require("./data/navigation.json")
+// Import Slideshow data
+let slideshow = require('./data/slideshow.json')
+// Import Gallery data
+let gallery = require('./data/gallery.json')
+// Import page data
+let content = require('./data/pages.json')
+// Import destination data
+let destinations = require('./data/destinations.json')
 //Create some routes
 app.get('/', (request,response)=>{
+
+    // Filter slideshow object to get home page only
+    let slides = slideshow.slides.filter((slide)=>{
+    return slide.home == true
+    })
+
     response.type("text/html")
-    response.render("home" , { title:"Miami Travel Site", nav: navigation  })
+    response.render("page" , { 
+        title:"Miami Travel Site", 
+        nav: navigation, 
+        slides: slides,
+        images: gallery.images 
+    })
+})
+//Dynamic routes for pages
+app.get('/page/:page',(req,res) => {
+
+     // Filter pages object to get page from :page req.params.page
+     let page = content.pages.filter((item)=>{
+        return item.page == req.params.page
+        })
+        //page is an array with just 1 item. we access the position 0 to get the object alone
+        console.log(page[0]);
+
+    // Filter slideshow object to get home page only
+    let slides = slideshow.slides.filter((slide)=>{
+        return slide.page == req.params.page
+        })
+
+        // Filter slideshow object to get home page only
+        let dest = destinations.locations.filter((loc)=>{
+            return loc.page == req.params.page
+            })    
+
+    res.type("text/html")
+    res.render("page" , { 
+        title:page[0].title,
+        description:page[0].description, 
+        locations: dest,
+        nav: navigation, 
+        slides: slides,
+        images: gallery.images 
+    })
+
 })
 
 app.get('/beaches', (request,response)=>{
