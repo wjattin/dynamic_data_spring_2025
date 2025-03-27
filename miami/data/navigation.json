@@ -19,16 +19,16 @@
             "href":"/page/beaches"
         },
         {
+            "text":"Downtown",
+            "href":"/page/downtown"
+        },
+        {
+            "text":"Everglades",
+            "href":"/page/everglades"
+        },
+        {
             "text":"About",
             "href":"/page/about"
-        },
-        {
-            "href":"/newsletter-signup",
-            "text":"News Letter Signup"
-        },
-        {
-            "href":"/newsletter/list",
-            "text":"Newsletter List"
         }
 
     ]
