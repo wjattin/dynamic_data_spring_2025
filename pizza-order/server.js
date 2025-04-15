@@ -213,6 +213,7 @@ app.post('/order/create', async (req,res) => {
   res.redirect('/orders')
 })
 app.get('/orders', async (req,res)=>{
+  // Object relation: Brings the information of the customer with the order
   const orders = await Order.findAll({include:[{model:Customer,required:true}]}).then((data) => {
     console.log(data)
     res.type('text/html')
