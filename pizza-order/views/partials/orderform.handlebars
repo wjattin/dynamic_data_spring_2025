@@ -1,10 +1,16 @@
-<form method="post" action="/order/create" enctype="application/x-www-form-urlencoded">
-<input type="text" value="{{customer.id}}" name="cid">
+<form method="post" action="/order/{{#if order.id}}edit{{else}}create{{/if}}" enctype="application/x-www-form-urlencoded">
+{{#if order.id}} <input type="text" name="id" value="{{order.id}}">{{/if}}   
+<input type="text" value="{{#if customer.id}}{{customer.id}}{{else}}{{customer.dataValues.id}}{{/if}}" name="cid">
   <div class="mb-3">
     <label for="size" class="form-label">Size</label>
 
     <select class="form-select" aria-label="select size" name="size">
+      {{#if order.size}}
+            <option selected value="{{order.size}}">{{order.size}}</option>
+
+      {{else}}
       <option selected>Select a size</option>
+      {{/if}}      
       <option value="S">Small</option>
       <option value="M">Medium</option>
       <option value="L">Large</option>
@@ -13,7 +19,14 @@
   </div>
 
   <div class="mb-3">
-
+    {{#each order.toppings}}
+    <div class="form-check">
+      <input checked class="form-check-input" type="checkbox" value="{{this}}" id="toppings_{{this}}" name="toppings[]">
+      <label class="form-check-label" for="toppings">
+       {{this}}
+      </label>
+    </div>
+    {{/each}}
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="ham" id="toppings_ham" name="toppings[]">
       <label class="form-check-label" for="toppings">
@@ -39,14 +52,18 @@
 
   <div class="mb-3">
     <label for="notes" class="form-label">Notes</label>
-    <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+    <textarea class="form-control" id="notes" name="notes" rows="3">{{order.notes}}</textarea>
   </div>
 
   <div class="mb-3">
     <label for="status" class="form-label">Status</label>
 
     <select class="form-select" aria-label="select status" name="status">
+      {{#if order.status}}
+            <option selected value="{{order.status}}"> {{order.status}} </option>
+           {{/if}}
       <option selected value="New">New</option>
+
       <option value="Processing">Processing</option>
       <option value="Completed">Completed</option>
     </select>

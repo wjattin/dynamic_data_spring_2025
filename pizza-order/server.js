@@ -221,7 +221,124 @@ app.get('/orders', async (req,res)=>{
   })
 })
 
-  
+
+app.get('/order/details/:id', async (req, res) => {
+  // req.file is the name of your file in the form above, here 'avatar'
+  // req.body will hold the text fields, if there were any 
+  const order = await Order.findOne({where: {id: req.params.id}, include:[{model:Customer,required:true}]}).then((data)=>{
+    console.log("data")
+    console.log(data)
+    console.log("********")
+    res.type('text/html')
+    res.render('orderdetails',{"order":data})
+  });
+});
+
+app.get('/order/edit/:id', async (req, res) => {
+  // req.file is the name of your file in the form above, here 'avatar'
+  // req.body will hold the text fields, if there were any 
+  const order = await Order.findOne({where: {id: req.params.id}, include:[{model:Customer,required:true}]}).then((data)=>{
+    // We need to process some data in order to populate the order form
+    //console.log(data)
+    let customer = data.getDataValue('Customer')
+    let order = {
+      id: data.getDataValue('id'),
+      size: data.getDataValue('size'),
+      toppings: [], // We will tak ecare of the toppings next
+      total: data.getDataValue('total'),
+      notes: data.getDataValue('notes'),
+      status: data.getDataValue('status')
+    }
+    let tmpToppings = data.getDataValue('toppings').split(",")
+    tmpToppings.forEach((topping)=>{
+      order.toppings.push(topping)
+    }) 
+
+    console.log("order")
+    console.log(order)
+    console.log(customer)
+    
+    console.log("********")
+    res.type('text/html')
+    res.render('order',{"order":order,"customer":customer})
+  });
+});
+
+
+app.post('/order/edit', async (req,res) => {
+
+  console.log(req.body)
+
+  let total = 0.0
+  let size = req.body.size 
+
+  let toppings = req.body.toppings
+
+  if(size == 'S' ) {
+    total += 10.00
+  } else if(size == 'M' ) {
+    total += 15.00
+  } else if(size == 'L' ) {
+    total += 18.00
+  } else if(size == 'XL' ) {
+    total += 22.00
+  }
+  //Toppings might be missing if no toppings were checked 
+  if(typeof(toppings) != 'undefined'){  
+  toppings.forEach( (value) =>{ 
+    if(value == 'ham') {
+      total += 3.50
+    }  
+    if(value == 'pepperoni') {
+      total += 3.00
+    }  
+    if(value == 'mushrooms') {
+      total += 2.00
+    }  
+  })
+} else {
+  //set the value of toppings to none 
+  toppings = "None"
+} 
+  // find the order we are adding this order to
+  const order = await Order.findByPk(req.body.id)
+  //we can do some error checking
+  //add the order to the customer object
+  const newOrder = await order.update({
+    size: size,
+    toppings: toppings.toString(),
+    notes: req.body.notes,
+    total:total,
+    status:req.body.status
+  })
+  res.type('text/html')
+  res.redirect('/orders')
+})
+
+app.post('/order/edit', async (req, res) => {
+  // req.file is the name of your file in the form above, here 'avatar'
+  // req.body will hold the text fields, if there were any 
+  console.log(req.body)
+  const order = await Order.findByPk(req.body.id);
+  console.log(order)
+  console.log(req.body.id)
+  await order.update({
+    size: req.body.size,
+    toppings: req.body.toppings.toString(),
+    address: req.body.address,
+    city: req.body.city,
+    state: req.body.state,
+    zip: req.body.zip,
+    email: req.body.email,
+    phone: req.body.phone,
+   }).then(()=>{
+    customers.save()
+    res.type('text/html')
+    //redirect to the customers list
+    res.redirect('/customers')
+   });
+
+});   
 //set up error handling 
 //not found 
 app.use((req,res)=>{

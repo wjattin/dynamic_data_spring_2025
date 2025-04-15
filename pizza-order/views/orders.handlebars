@@ -28,7 +28,11 @@
                         </div>
                     <div class="col">{{this.dataValues.size}}</div>
                     <div class="col">{{this.dataValues.total}}</div>
-                    <div class="col">View Edit Delete </div>
+                    <div class="col">
+                       <a href="/order/details/{{this.dataValues.id}}">View</a> 
+                       <a href="/order/edit/{{this.dataValues.id}}">Edit</a> 
+                       <a href="/order/delete/{{this.dataValues.id}}">Delete</a> 
+                        </div>
                 </div>    
             </td>
         </tr>

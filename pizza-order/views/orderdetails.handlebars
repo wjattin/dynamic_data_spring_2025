@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col-lg-8">
+        <h1>Orders</h1>
+    </div>
+</div>
+
+<div class="row">
+    <table class="table table-striped">
+        <tr scope="row">
+            <td>
+                <div class="row">
+                    <div class="col">id</div>
+                    <div class="col">Size</div>
+                    <div class="col">Toppings</div>
+                    <div class="col">Total</div>
+                    <div class="col">Actions</div>
+                </div>    
+            </td>
+        </tr>
+<tr scope="row">
+            <td>
+                <div class="row">
+                    <div class="col">{{order.dataValues.id}}</div>
+
+                    <div class="col">{{order.dataValues.size}}</div>
+                        <div class="col">
+                            {{order.dataValues.toppings}}
+                        </div>
+                    <div class="col">{{order.dataValues.total}}</div>
+                    <div class="col">
+                       <a href="/order/details/{{order.dataValues.id}}">View</a> 
+                       <a href="/order/edit/{{order.dataValues.id}}">Edit</a> 
+                       <a href="/order/delete/{{order.dataValues.id}}">Delete</a> 
+                        </div>
+                </div>    
+            </td>
+        </tr>
+
+
+
+
+        
+
+        
+
+</table>
+</div>                  
+<h2>Customer Information</h2>
+<h3>
+{{order.dataValues.Customer.dataValues.first_name}}
+{{order.dataValues.Customer.dataValues.last_name}}
+</h3>
+<p>
+{{order.dataValues.Customer.dataValues.address}} <br>
+{{order.dataValues.Customer.dataValues.city}}, 
+{{order.dataValues.Customer.dataValues.state}}, 
+{{order.dataValues.Customer.dataValues.zip}}
+<br>
+{{order.dataValues.Customer.dataValues.phone}}
+<br>
+<a href="mailto:{{order.dataValues.Customer.dataValues.email}}">
+    {{order.dataValues.Customer.dataValues.email}}
+
+</a>
+
+
+</p>
