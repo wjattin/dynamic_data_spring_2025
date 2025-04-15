@@ -159,13 +159,66 @@ app.get('/customer/delete/:id', async (req, res) => {
 
 });
 // Order process
-//create a customer
-app.get('/order/create', (req, res) => {
-  // req.file is the name of your file in the form above, here 'avatar'
-  // req.body will hold the text fields, if there were any 
+//create an order .. we need to pass the customer's id to relate it to the order
+app.get('/order/create/:id', async (req, res) => {
+  //get the customer
+  const customer = await Customer.findOne({where: {id: req.params.id},raw:true}).then((data)=>{
+    console.log("data")
+    console.log(data)
+    console.log("********")
+    res.type('text/html')
+    res.render('order',{"customer":data})
+  });
+})
+app.post('/order/create', async (req,res) => {
+
+  console.log(req.body)
+
+  let total = 0.0
+  let size = req.body.size 
+  let toppings = req.body.toppings
+
+  if(size == 'S' ) {
+    total += 10.00
+  } else if(size == 'M' ) {
+    total += 15.00
+  } else if(size == 'L' ) {
+    total += 18.00
+  } else if(size == 'XL' ) {
+    total += 22.00
+  }  
+  toppings.forEach( (value) =>{ 
+    if(value == 'ham') {
+      total += 3.50
+    }  
+    if(value == 'pepperoni') {
+      total += 3.00
+    }  
+    if(value == 'mushrooms') {
+      total += 2.00
+    }  
+  })
+  // find the customer we are adding this order to
+  const customer = await Customer.findByPk(req.body.cid)
+  //we can do some error checking
+  //add the order to the customer object
+  const newOrder = await customer.createOrder({
+    size: size,
+    toppings: toppings.toString(),
+    notes: req.body.notes,
+    total:total,
+    status:req.body.status
+  })
   res.type('text/html')
-  res.render('order')
-});
+  res.redirect('/orders')
+})
+app.get('/orders', async (req,res)=>{
+  const orders = await Order.findAll({include:[{model:Customer,required:true}]}).then((data) => {
+    console.log(data)
+    res.type('text/html')
+    res.render('orders',{'orders':data})
+  })
+})
 
   
 //set up error handling 
