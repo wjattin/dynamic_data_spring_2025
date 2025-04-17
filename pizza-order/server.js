@@ -1,7 +1,8 @@
 //initialize express
 const express = require('express')
-
+const multer = require('multer')
 const app = express()
+app.use(express.static('./public'))
 
 //import body-parser
 const bodyParser = require('body-parser')
@@ -38,12 +39,33 @@ const Customer = sequelize.define('Customers',
 Order.belongsTo(Customer)
 Customer.hasMany(Order)
 
+// Example image upload + storing information in the database
+const Profile = sequelize.define('Profile', {
+  first_name: DataTypes.STRING,
+  last_name: DataTypes.STRING,
+  image: DataTypes.STRING,
+}) 
 //Initialize bodyparser.. converts POST request objects to json
 app.use(bodyParser.urlencoded({extended:true}))
 //app.use(bodyParser.json())
 
+
+
 //sync the models to the database
 sequelize.sync()
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/uploads/images')
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname)
+  }
+})
+
+const upload = multer({ storage: storage })
 
 //initialize handlebars
 const handlebars = require('express-handlebars')
@@ -58,6 +80,24 @@ app.get('/', (req,res)=>{
     res.type('text/html')
     res.render('page')
 })
+
+//Upload + store in database
+app.post('/profile', upload.single('image'), async (req, res) => {
+  // req.file is the name of your file in the form above, here 'avatar'
+  // req.body will hold the text fields, if there were any 
+  console.log(req.file, req.body)
+  console.log(req.file.originalname)
+  console.log(req.file.mimetype)
+  res.type('text/html')
+  //res.send('uploaded!!')
+  const profile = await Profile.create({
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    image: req.file.filename
+  })
+  res.json(profile)
+
+});
 // C R U D
 //create a customer
 app.get('/customer/create', (req, res) => {

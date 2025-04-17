@@ -1,5 +1,17 @@
 <h2>Upload file</h2>
 <form action="/profile" method="post" enctype="multipart/form-data">
-  <input type="file" name="avatar" />
-  <button type="submit"> Upload </button>
+<div class="mb-3">
+  <label for="first_name" class="form-label">First Name</label>
+  <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter First Name">
+</div>
+<div class="mb-3">
+  <label for="last_name" class="form-label">First Name</label>
+  <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Last Name">
+</div>
+
+<div class="mb-3">
+  <label for="image" class="form-label">Image</label>
+    <input type="file" class="form-control" name="image" />
+</div>
+  <button type="submit" class="btn btn-primary mb-3"> Save </button>
 </form>
