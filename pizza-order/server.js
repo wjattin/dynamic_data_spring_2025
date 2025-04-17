@@ -76,9 +76,12 @@ app.set('view engine', 'handlebars')
 const port = process.env.port || 3000 
 
 //create routes 
-app.get('/', (req,res)=>{
+app.get('/', async (req,res)=>{
+  await Profile.findAll().then((profiles)=>{
     res.type('text/html')
-    res.render('page')
+    res.render('page',{"profiles":profiles})
+  } )
+ 
 })
 
 //Upload + store in database
@@ -95,7 +98,7 @@ app.post('/profile', upload.single('image'), async (req, res) => {
     last_name: req.body.last_name,
     image: req.file.filename
   })
-  res.json(profile)
+  res.redirect("/")
 
 });
 // C R U D

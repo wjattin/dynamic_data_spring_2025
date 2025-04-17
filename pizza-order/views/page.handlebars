@@ -1,1 +1,27 @@
 {{>upload}}
+
+<h1>Profiles</h1>
+<table class="table table-striped">
+        <tr>
+            <th>
+                <div class="row">
+
+    <div class="col">Image</div>
+    <div class="col">First Name</div>
+    <div class="col">Last Name</div>
+    </div>
+    </th>
+</tr>
+{{#each profiles}}
+<tr>
+    <td>
+        <div class="row">
+
+    <div class="col"><img class="img-fluid" src="/uploads/images/{{this.dataValues.image}}" alt=""> </div>
+    <div class="col">{{this.dataValues.first_name}}</div>
+    <div class="col">{{this.dataValues.last_name}}</div>
+    </div>
+    </td>
+</tr>
+{{/each}}
+</table>
